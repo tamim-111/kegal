@@ -29,31 +29,27 @@ type State = {
 };
 
 type Action =
-    | { type: "START" }
     | { type: "PAUSE" }
     | { type: "RESET" }
     | { type: "TICK" }
     | { type: "TRANSITION"; payload: Partial<State> };
 
-const initialState = (settings: Settings): State => ({
+const initialState: State = {
     running: false,
     phase: "LONG_HOLD",
     subPhase: "HOLD",
     setIndex: 1,
     repIndex: 1,
-    seconds: settings.longHold.hold,
-});
+    seconds: 0,
+};
 
 function reducer(state: State, action: Action): State {
     switch (action.type) {
-        case "START":
-            return { ...state, running: true };
-
         case "PAUSE":
             return { ...state, running: false };
 
         case "RESET":
-            return { ...state, seconds: state.seconds, running: false };
+            return { ...initialState };
 
         case "TICK":
             return { ...state, seconds: state.seconds - 1 };
@@ -67,15 +63,12 @@ function reducer(state: State, action: Action): State {
 }
 
 export default function ExerciseTimer({ settings }: { settings: Settings }) {
-    const [state, dispatch] = useReducer(
-        reducer,
-        settings,
-        initialState
-    );
+    const [state, dispatch] = useReducer(reducer, initialState);
 
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const stateRef = useRef<State>(state);
     const settingsRef = useRef<Settings>(settings);
+    const sessionConfigRef = useRef<Settings | null>(null);
 
     useEffect(() => {
         stateRef.current = state;
@@ -103,12 +96,33 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
         return clear;
     }, [state.running, state.phase]);
 
-    // STATE MACHINE ENGINE
+    // START handler (FIXED - no reducer logic, fully type-safe)
+    const handleStart = () => {
+        const cfg = settingsRef.current;
+
+        sessionConfigRef.current = cfg;
+
+        dispatch({
+            type: "TRANSITION",
+            payload: {
+                running: true,
+                phase: "LONG_HOLD",
+                subPhase: "HOLD",
+                setIndex: 1,
+                repIndex: 1,
+                seconds: cfg.longHold.hold,
+            },
+        });
+    };
+
+    // STATE MACHINE
     useEffect(() => {
         if (!state.running) return;
         if (state.seconds > 0) return;
 
-        const cfg = settingsRef.current;
+        const cfg = sessionConfigRef.current;
+        if (!cfg) return;
+
         const current = stateRef.current;
 
         const isLastLongRep = current.repIndex >= cfg.longHold.reps;
@@ -124,22 +138,20 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
                     };
                 }
 
-                if (current.subPhase === "REST") {
-                    if (!isLastLongRep) {
-                        return {
-                            subPhase: "HOLD",
-                            repIndex: current.repIndex + 1,
-                            seconds: cfg.longHold.hold,
-                        };
-                    }
-
+                if (!isLastLongRep) {
                     return {
-                        phase: "LONG_REST_A",
                         subPhase: "HOLD",
-                        repIndex: 1,
-                        seconds: cfg.longRestA,
+                        repIndex: current.repIndex + 1,
+                        seconds: cfg.longHold.hold,
                     };
                 }
+
+                return {
+                    phase: "LONG_REST_A",
+                    subPhase: "HOLD",
+                    repIndex: 1,
+                    seconds: cfg.longRestA,
+                };
             }
 
             if (current.phase === "LONG_REST_A") {
@@ -158,22 +170,20 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
                     };
                 }
 
-                if (current.subPhase === "REST") {
-                    if (!isLastShortRep) {
-                        return {
-                            subPhase: "HOLD",
-                            repIndex: current.repIndex + 1,
-                            seconds: cfg.shortHold.hold,
-                        };
-                    }
-
+                if (!isLastShortRep) {
                     return {
-                        phase: "LONG_REST_B",
                         subPhase: "HOLD",
-                        repIndex: 1,
-                        seconds: cfg.longRestB,
+                        repIndex: current.repIndex + 1,
+                        seconds: cfg.shortHold.hold,
                     };
                 }
+
+                return {
+                    phase: "LONG_REST_B",
+                    subPhase: "HOLD",
+                    repIndex: 1,
+                    seconds: cfg.longRestB,
+                };
             }
 
             if (current.phase === "LONG_REST_B") {
@@ -213,23 +223,25 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
     return (
         <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
-
+                {/* HEADER */}
                 <div className="flex justify-between items-center">
                     <h2 className="text-2xl font-bold">Exercise Timer</h2>
 
-                    <div className="badge badge-primary">
+                    <div className={`badge ${state.running ? "badge-success" : "badge-primary"}`}>
                         {state.running ? "Running" : "Stopped"}
                     </div>
                 </div>
 
                 <div className="divider" />
 
+                {/* PHASE */}
                 <div className="text-center py-6">
                     <h3 className="text-3xl font-bold">
                         {state.phase} • {state.subPhase}
                     </h3>
                 </div>
 
+                {/* TIMER */}
                 <div className="flex justify-center">
                     <div
                         className="radial-progress text-primary"
@@ -245,6 +257,7 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
                     </div>
                 </div>
 
+                {/* STATS */}
                 <div className="grid md:grid-cols-3 gap-4 mt-8">
                     <div className="stat bg-base-200 rounded-box">
                         <div className="stat-title">Current Set</div>
@@ -264,10 +277,12 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
                     </div>
                 </div>
 
+                {/* CONTROLS */}
                 <div className="flex gap-3 mt-8 justify-center">
                     <button
                         className="btn btn-primary"
-                        onClick={() => dispatch({ type: "START" })}
+                        onClick={handleStart}
+                        disabled={state.running}
                     >
                         Start
                     </button>
@@ -275,6 +290,7 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
                     <button
                         className="btn btn-warning"
                         onClick={() => dispatch({ type: "PAUSE" })}
+                        disabled={!state.running}
                     >
                         Pause
                     </button>
