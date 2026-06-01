@@ -38,103 +38,85 @@ export default function ExerciseSettings({ settings, setSettings }: Props) {
     };
 
     return (
-        <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-                <h2 className="card-title text-2xl">Exercise Settings</h2>
-                <div className="divider my-0" />
+        <div className="card bg-base-100 shadow-md sm:shadow-xl">
+            <div className="card-body p-4 sm:p-6">
 
-                <div className="space-y-5">
+                <h2 className="text-xl sm:text-2xl font-bold">Settings</h2>
+                <div className="divider my-1" />
+
+                <div className="space-y-6">
+
                     {/* LONG HOLD */}
-                    <div>
-                        <h3 className="font-semibold mb-3">Long Hold Exercise</h3>
+                    <div className="bg-base-200 rounded-xl p-4 space-y-3">
+                        <h3 className="font-semibold">Long Hold</h3>
 
-                        <div className="grid gap-3">
-                            <input
-                                type="number"
-                                className="input input-bordered"
-                                value={settings.longHold.hold}
-                                onChange={(e) =>
-                                    update(["longHold", "hold"], +e.target.value)
-                                }
-                            />
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <input className="input input-bordered w-full" value={settings.longHold.hold}
+                                onChange={(e) => update(["longHold", "hold"], +e.target.value)} placeholder="Hold (sec)" />
 
-                            <input
-                                type="number"
-                                className="input input-bordered"
-                                value={settings.longHold.rest}
-                                onChange={(e) =>
-                                    update(["longHold", "rest"], +e.target.value)
-                                }
-                            />
+                            <input className="input input-bordered w-full" value={settings.longHold.rest}
+                                onChange={(e) => update(["longHold", "rest"], +e.target.value)} placeholder="Rest (sec)" />
 
-                            <input
-                                type="number"
-                                className="input input-bordered"
-                                value={settings.longHold.reps}
-                                onChange={(e) =>
-                                    update(["longHold", "reps"], +e.target.value)
-                                }
-                            />
+                            <input className="input input-bordered w-full" value={settings.longHold.reps}
+                                onChange={(e) => update(["longHold", "reps"], +e.target.value)} placeholder="Reps" />
                         </div>
                     </div>
 
-                    {/* REST A */}
-                    <input
-                        type="number"
-                        className="input input-bordered"
-                        value={settings.longRestA}
-                        onChange={(e) => update(["longRestA"], +e.target.value)}
-                    />
+                    {/* LONG REST A */}
+                    <div className="bg-base-200 rounded-xl p-4">
+                        <h3 className="font-semibold mb-2">Rest After Long Set</h3>
+                        <input
+                            className="input input-bordered w-full"
+                            value={settings.longRestA}
+                            onChange={(e) => update(["longRestA"], +e.target.value)}
+                            placeholder="Seconds"
+                        />
+                    </div>
 
                     {/* SHORT HOLD */}
-                    <div>
-                        <h3 className="font-semibold mb-3">Short Hold Exercise</h3>
+                    <div className="bg-base-200 rounded-xl p-4 space-y-3">
+                        <h3 className="font-semibold">Short Hold</h3>
 
-                        <div className="grid gap-3">
-                            <input
-                                type="number"
-                                className="input input-bordered"
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <input className="input input-bordered w-full"
                                 value={settings.shortHold.hold}
-                                onChange={(e) =>
-                                    update(["shortHold", "hold"], +e.target.value)
-                                }
-                            />
+                                onChange={(e) => update(["shortHold", "hold"], +e.target.value)}
+                                placeholder="Hold" />
 
-                            <input
-                                type="number"
-                                className="input input-bordered"
+                            <input className="input input-bordered w-full"
                                 value={settings.shortHold.rest}
-                                onChange={(e) =>
-                                    update(["shortHold", "rest"], +e.target.value)
-                                }
-                            />
+                                onChange={(e) => update(["shortHold", "rest"], +e.target.value)}
+                                placeholder="Rest" />
 
-                            <input
-                                type="number"
-                                className="input input-bordered"
+                            <input className="input input-bordered w-full"
                                 value={settings.shortHold.reps}
-                                onChange={(e) =>
-                                    update(["shortHold", "reps"], +e.target.value)
-                                }
-                            />
+                                onChange={(e) => update(["shortHold", "reps"], +e.target.value)}
+                                placeholder="Reps" />
                         </div>
                     </div>
 
                     {/* REST B */}
-                    <input
-                        type="number"
-                        className="input input-bordered"
-                        value={settings.longRestB}
-                        onChange={(e) => update(["longRestB"], +e.target.value)}
-                    />
+                    <div className="bg-base-200 rounded-xl p-4">
+                        <h3 className="font-semibold mb-2">Final Rest</h3>
+                        <input
+                            className="input input-bordered w-full"
+                            value={settings.longRestB}
+                            onChange={(e) => update(["longRestB"], +e.target.value)}
+                            placeholder="Seconds"
+                        />
+                    </div>
 
                     {/* SETS */}
-                    <input
-                        type="number"
-                        className="input input-bordered"
-                        value={settings.sets}
-                        onChange={(e) => update(["sets"], +e.target.value)}
-                    />
+                    <div className="bg-primary/10 rounded-xl p-4">
+                        <h3 className="font-semibold mb-2">Sets</h3>
+                        <input
+                            className="input input-bordered w-full"
+                            value={settings.sets}
+                            onChange={(e) => update(["sets"], +e.target.value)}
+                            placeholder="Number of sets"
+                        />
+                    </div>
+
                 </div>
             </div>
         </div>

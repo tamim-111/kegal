@@ -32,11 +32,33 @@ export default function HomePage() {
   }, [settings]);
 
   return (
-    <div className="min-h-screen bg-base-200 p-3 sm:p-4 lg:p-8">
-      <div className="mx-auto max-w-7xl grid gap-4 lg:gap-6 grid-cols-1 lg:grid-cols-[400px_1fr]">
-        <ExerciseSettings settings={settings} setSettings={setSettings} />
-        <ExerciseTimer settings={settings} />
+    <div>
+
+      <div className="hidden md:block ">
+        <div className="min-h-screen bg-base-200 px-3 py-4 sm:p-6 lg:p-10">
+          <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-4 sm:gap-6">
+            <ExerciseSettings settings={settings} setSettings={setSettings} />
+            <ExerciseTimer settings={settings} />
+          </div>
+        </div>
       </div>
+
+      <div className="md:hidden">
+        <div className="min-h-screen bg-base-200 px-3 py-4 sm:p-6 lg:p-10">
+          <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-4 sm:gap-6">
+
+            <div className="order-2 lg:order-1">
+              <ExerciseSettings settings={settings} setSettings={setSettings} />
+            </div>
+
+            <div className="order-1 lg:order-2">
+              <ExerciseTimer settings={settings} />
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }

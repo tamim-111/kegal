@@ -221,71 +221,70 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
     const remainingSets = Math.max(0, settings.sets - state.setIndex + 1);
 
     return (
-        <div className="card bg-base-100 shadow-xl">
+        <div className="card bg-base-100 shadow-md sm:shadow-xl">
             <div className="card-body p-4 sm:p-6">
 
                 {/* HEADER */}
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                    <h2 className="text-xl sm:text-2xl font-bold">Exercise Timer</h2>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <h2 className="text-xl sm:text-2xl font-bold">Timer</h2>
 
-                    <div className={`badge ${state.running ? "badge-success" : "badge-primary"}`}>
+                    <div className={`badge px-3 py-2 ${state.running ? "badge-success" : "badge-neutral"}`}>
                         {state.running ? "Running" : "Stopped"}
                     </div>
                 </div>
 
-                <div className="divider" />
+                <div className="divider my-2" />
 
                 {/* PHASE */}
                 <div className="text-center py-4 sm:py-6">
-                    <h3 className="text-xl sm:text-3xl font-bold">
-                        {state.phase} • {state.subPhase}
+                    <p className="text-sm opacity-70">Current Phase</p>
+                    <h3 className="text-2xl sm:text-4xl font-bold tracking-wide">
+                        {state.phase} · {state.subPhase}
                     </h3>
                 </div>
 
                 {/* TIMER */}
-                <div className="flex justify-center">
+                <div className="flex justify-center my-4 sm:my-6">
                     <div
-                        className="radial-progress text-primary sm:[--size:14rem] [--size:10rem] [--thickness:10px] sm:[--thickness:12px]"
+                        className="radial-progress text-primary"
                         style={
                             {
                                 "--value": progress,
+                                "--size": "10rem",
+                                "--thickness": "12px",
                             } as React.CSSProperties
                         }
                     >
-                        <div className="text-3xl sm:text-5xl font-bold">
+                        <span className="text-3xl sm:text-5xl font-bold">
                             {state.seconds}
-                        </div>
+                        </span>
                     </div>
                 </div>
 
                 {/* STATS */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-6 sm:mt-8">
-                    <div className="stat bg-base-200 rounded-box">
-                        <div className="stat-title">Set</div>
-                        <div className="stat-value text-lg sm:text-3xl">
-                            {state.setIndex}
-                        </div>
+                <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                    <div className="stat bg-base-200 rounded-xl p-3">
+                        <div className="stat-title text-xs">Set</div>
+                        <div className="stat-value text-lg sm:text-2xl">{state.setIndex}</div>
                     </div>
 
-                    <div className="stat bg-base-200 rounded-box">
-                        <div className="stat-title">Remaining</div>
-                        <div className="stat-value text-primary text-lg sm:text-3xl">
+                    <div className="stat bg-base-200 rounded-xl p-3">
+                        <div className="stat-title text-xs">Left</div>
+                        <div className="stat-value text-primary text-lg sm:text-2xl">
                             {remainingSets}
                         </div>
                     </div>
 
-                    <div className="stat bg-base-200 rounded-box">
-                        <div className="stat-title">Rep</div>
-                        <div className="stat-value text-lg sm:text-3xl">
-                            {state.repIndex}
-                        </div>
+                    <div className="stat bg-base-200 rounded-xl p-3">
+                        <div className="stat-title text-xs">Rep</div>
+                        <div className="stat-value text-lg sm:text-2xl">{state.repIndex}</div>
                     </div>
                 </div>
 
                 {/* CONTROLS */}
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-6 sm:mt-8 justify-center">
+                <div className="mt-6 grid grid-cols-3 gap-2">
                     <button
-                        className="btn btn-primary w-full sm:w-auto"
+                        className="btn btn-primary"
                         onClick={handleStart}
                         disabled={state.running}
                     >
@@ -293,7 +292,7 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
                     </button>
 
                     <button
-                        className="btn btn-warning w-full sm:w-auto"
+                        className="btn btn-warning"
                         onClick={() => dispatch({ type: "PAUSE" })}
                         disabled={!state.running}
                     >
@@ -301,12 +300,13 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
                     </button>
 
                     <button
-                        className="btn btn-error w-full sm:w-auto"
+                        className="btn btn-error"
                         onClick={() => dispatch({ type: "RESET" })}
                     >
                         Reset
                     </button>
                 </div>
+
             </div>
         </div>
     );
