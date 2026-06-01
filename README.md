@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Build a configurable interval-based exercise timer with two exercise phases per cycle, repeated across multiple sets.
 
-## Getting Started
+1. Long Hold Exercise
+   - Hold duration: default 10 seconds (configurable)
+   - Rest duration: default 5 seconds (configurable)
+   - Repetitions: default 10 (configurable)
+2. Long rest after Long Hold finished: 1 Minutes (configurable)
+3. Short Hold Exercise
+   - Hold duration: default 1 seconds (configurable)
+   - Rest duration: default 1 seconds (configurable)
+   - Repetitions: default 15 (configurable)
+4. Long rest after Short Hold finished: 1 Minutes (configurable)
+   
+Now 1 full set = 1 + 2 + 3 + 4. so default full set is set to 10 (configurable). Meaning all default setting: 
+1. long hold exercise: 10 seconds hold, 5 seconds rest, 10 repetitions
+2. long rest: 1 minute
+3. short hold exercise: 1 second hold, 1 second rest, 15 repetitions
+4. long rest: 1 minute
+5. full set: 10 complete sets of repeating 1, 2, 3, 4.
 
-First, run the development server:
+so all the default settng if i press start then long hold timeing start for 10 seconds, afte 10 second 5 sec a short break start. then do the same tings for 10 times. then the logn breks comes for 1 mites. then the short hold exercise comes, hold the flabic floor mucles for 1 sec. count start in militsecond on the scresn. then 1 sec of rest. thes contiutes for 15 times default. then 1 mitues of long rest comes again. thies loop contues 10 times (customizable)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Build a configurable interval-based exercise timer with two exercise phases per cycle, repeated across multiple sets.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Core Structure
 
-## Learn More
+A full set consists of 4 sequential phases:
 
-To learn more about Next.js, take a look at the following resources:
+1. Long Hold Exercise (Phase A)
+Hold duration: default 10 seconds (configurable)
+Rest duration: default 5 seconds (configurable)
+Repetitions per set: default 10 reps (configurable)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Each repetition flow:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Hold → Rest → next repetition
+2. Long Rest (After Phase A)
+Duration: default 1 minute (configurable)
+3. Short Hold Exercise (Phase B)
+Hold duration: default 1 second (configurable)
+Rest duration: default 1 second (configurable)
+Repetitions per set: default 15 reps (configurable)
 
-## Deploy on Vercel
+Each repetition flow:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Hold → Rest → next repetition
+4. Long Rest (After Phase B)
+Duration: default 1 minute (configurable)
+Full Set Definition
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+One full set = Phase A → Rest → Phase B → Rest
+
+Total Sets
+Default number of full sets: 10
+Fully configurable
+Execution Flow (Simplified)
+
+For each set (1 → N):
+
+Run Long Hold Exercise (repeat N times):
+Hold (10s) → Rest (5s)
+Long Rest (1 min)
+Run Short Hold Exercise (repeat N times):
+Hold (1s) → Rest (1s)
+Long Rest (1 min)
+
+Repeat the entire cycle for total sets.
+
+Key Behavior Requirements
+Timer must run sequentially (no overlap between phases)
+Each phase must complete fully before moving to the next
+All durations and repetitions must be configurable
+UI should clearly indicate:
+Current phase
+Remaining time (countdown)
+Current repetition / total repetitions
+Current set / total sets
