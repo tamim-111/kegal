@@ -222,10 +222,11 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
 
     return (
         <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
+            <div className="card-body p-4 sm:p-6">
+
                 {/* HEADER */}
-                <div className="flex justify-between items-center">
-                    <h2 className="text-2xl font-bold">Exercise Timer</h2>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                    <h2 className="text-xl sm:text-2xl font-bold">Exercise Timer</h2>
 
                     <div className={`badge ${state.running ? "badge-success" : "badge-primary"}`}>
                         {state.running ? "Running" : "Stopped"}
@@ -235,8 +236,8 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
                 <div className="divider" />
 
                 {/* PHASE */}
-                <div className="text-center py-6">
-                    <h3 className="text-3xl font-bold">
+                <div className="text-center py-4 sm:py-6">
+                    <h3 className="text-xl sm:text-3xl font-bold">
                         {state.phase} • {state.subPhase}
                     </h3>
                 </div>
@@ -244,43 +245,47 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
                 {/* TIMER */}
                 <div className="flex justify-center">
                     <div
-                        className="radial-progress text-primary"
+                        className="radial-progress text-primary sm:[--size:14rem] [--size:10rem] [--thickness:10px] sm:[--thickness:12px]"
                         style={
                             {
                                 "--value": progress,
-                                "--size": "14rem",
-                                "--thickness": "12px",
                             } as React.CSSProperties
                         }
                     >
-                        <div className="text-5xl font-bold">{state.seconds}</div>
+                        <div className="text-3xl sm:text-5xl font-bold">
+                            {state.seconds}
+                        </div>
                     </div>
                 </div>
 
                 {/* STATS */}
-                <div className="grid md:grid-cols-3 gap-4 mt-8">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-6 sm:mt-8">
                     <div className="stat bg-base-200 rounded-box">
-                        <div className="stat-title">Current Set</div>
-                        <div className="stat-value">{state.setIndex}</div>
+                        <div className="stat-title">Set</div>
+                        <div className="stat-value text-lg sm:text-3xl">
+                            {state.setIndex}
+                        </div>
                     </div>
 
                     <div className="stat bg-base-200 rounded-box">
-                        <div className="stat-title">Remaining Sets</div>
-                        <div className="stat-value text-primary">
+                        <div className="stat-title">Remaining</div>
+                        <div className="stat-value text-primary text-lg sm:text-3xl">
                             {remainingSets}
                         </div>
                     </div>
 
                     <div className="stat bg-base-200 rounded-box">
                         <div className="stat-title">Rep</div>
-                        <div className="stat-value">{state.repIndex}</div>
+                        <div className="stat-value text-lg sm:text-3xl">
+                            {state.repIndex}
+                        </div>
                     </div>
                 </div>
 
                 {/* CONTROLS */}
-                <div className="flex gap-3 mt-8 justify-center">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-6 sm:mt-8 justify-center">
                     <button
-                        className="btn btn-primary"
+                        className="btn btn-primary w-full sm:w-auto"
                         onClick={handleStart}
                         disabled={state.running}
                     >
@@ -288,7 +293,7 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
                     </button>
 
                     <button
-                        className="btn btn-warning"
+                        className="btn btn-warning w-full sm:w-auto"
                         onClick={() => dispatch({ type: "PAUSE" })}
                         disabled={!state.running}
                     >
@@ -296,7 +301,7 @@ export default function ExerciseTimer({ settings }: { settings: Settings }) {
                     </button>
 
                     <button
-                        className="btn btn-error"
+                        className="btn btn-error w-full sm:w-auto"
                         onClick={() => dispatch({ type: "RESET" })}
                     >
                         Reset

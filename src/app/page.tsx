@@ -32,8 +32,8 @@ export default function HomePage() {
   }, [settings]);
 
   return (
-    <div className="min-h-screen bg-base-200 p-4 lg:p-8">
-      <div className="mx-auto max-w-7xl grid gap-6 lg:grid-cols-[400px_1fr]">
+    <div className="min-h-screen bg-base-200 p-3 sm:p-4 lg:p-8">
+      <div className="mx-auto max-w-7xl grid gap-4 lg:gap-6 grid-cols-1 lg:grid-cols-[400px_1fr]">
         <ExerciseSettings settings={settings} setSettings={setSettings} />
         <ExerciseTimer settings={settings} />
       </div>
